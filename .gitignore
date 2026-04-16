@@ -1,0 +1,11 @@
+dist
+node_modules
+.DS_Store
+.env
+.env.local
+server/jobs
+DiamondDB/
+annotations/
+runtime/DeepSeqHPI/*.pth
+__pycache__/
+*.pyc

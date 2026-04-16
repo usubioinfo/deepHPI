@@ -1,0 +1,12 @@
+defaults
+auth on
+tls on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+logfile /tmp/msmtp.log
+
+account default
+host smtp.your-relay.edu
+port 587
+from no-reply-deepHPI@bioinfo.usu.edu
+user your-relay-user
+password your-relay-password
