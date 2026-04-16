@@ -42,6 +42,24 @@ Run the webserver on port `3010`:
 docker run --rm -p 3010:3010 deephpi:latest
 ```
 
+To serve DeepHPI from a subpath such as `/deepHPI/`, build and run with a matching base path:
+
+```bash
+DEEPHPI_BASE_PATH=/deepHPI/ docker build -t deephpi:latest .
+docker run -d --restart unless-stopped --name deephpi \
+  -p 3010:3010 \
+  -e DEEPHPI_BASE_PATH=/deepHPI \
+  -e DEEPHPI_APP_URL=https://your-host.example/deepHPI \
+  deephpi:latest
+```
+
+Example Apache proxy configuration:
+
+```apache
+ProxyPass /deepHPI/ http://10.1.1.31:3010/deepHPI/
+ProxyPassReverse /deepHPI/ http://10.1.1.31:3010/deepHPI/
+```
+
 The container:
 
 - builds the React frontend during image creation

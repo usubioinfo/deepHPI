@@ -1,4 +1,5 @@
 import { navigationItems } from "../content/siteContent";
+import { assetPath, withBasePath } from "../lib/basePath";
 
 function isActive(currentPath, href) {
   return currentPath === href || (href !== "/" && currentPath.startsWith(`${href}/`));
@@ -13,7 +14,7 @@ export function RouteLink({ href, navigate, className = "", children }) {
   };
 
   return (
-    <a href={href} onClick={onClick} className={className}>
+    <a href={href.startsWith("/") ? withBasePath(href) : href} onClick={onClick} className={className}>
       {children}
     </a>
   );
@@ -27,7 +28,7 @@ export function AppShell({ currentPath, navigate, children }) {
           <div className="px-5 py-5 lg:px-7">
             <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[280px_minmax(0,1fr)_280px] xl:items-center">
               <div className="flex justify-center xl:justify-start">
-                <img src="/assets/site-logo.png" alt="DeepHPI" className="h-18 w-auto object-contain md:h-22" />
+                <img src={assetPath("/assets/site-logo.png")} alt="DeepHPI" className="h-18 w-auto object-contain md:h-22" />
               </div>
 
               <nav className="flex flex-wrap justify-center gap-2">
@@ -61,9 +62,9 @@ export function AppShell({ currentPath, navigate, children }) {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <p className="text-sm text-ink/78">DeepHPI: deep learning framework for host-pathogen interaction prediction.</p>
             <div className="flex items-center gap-6">
-              <img src="/assets/usu-logo.png" alt="Utah State University" className="h-10 w-auto object-contain" />
+              <img src={assetPath("/assets/usu-logo.png")} alt="Utah State University" className="h-10 w-auto object-contain" />
               <img
-                src="/assets/lab_logo_red.png"
+                src={assetPath("/assets/lab_logo_red.png")}
                 alt="Kaundal Bioinformatics Laboratory"
                 className="h-7 w-auto object-contain"
               />

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/AppShell";
+import { stripBasePath, withBasePath } from "./lib/basePath";
 import {
   AboutPage,
   CovidPage,
@@ -67,10 +68,10 @@ function matchRoute(pathname) {
 }
 
 export default function App() {
-  const [pathname, setPathname] = useState(() => normalizePath(window.location.pathname));
+  const [pathname, setPathname] = useState(() => normalizePath(stripBasePath(window.location.pathname)));
 
   useEffect(() => {
-    const onPopState = () => setPathname(normalizePath(window.location.pathname));
+    const onPopState = () => setPathname(normalizePath(stripBasePath(window.location.pathname)));
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
@@ -81,7 +82,7 @@ export default function App() {
       return;
     }
 
-    window.history.pushState({}, "", nextPath);
+    window.history.pushState({}, "", withBasePath(nextPath));
     setPathname(nextPath);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };

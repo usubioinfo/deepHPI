@@ -42,6 +42,7 @@ SWISSPROT_TAB = Path(
 HOST = os.getenv("DEEPHPI_HOST", "127.0.0.1")
 PORT = int(os.getenv("DEEPHPI_PORT", "8000"))
 APP_URL = os.getenv("DEEPHPI_APP_URL", "http://127.0.0.1:5173").rstrip("/")
+RAW_BASE_PATH = (os.getenv("DEEPHPI_BASE_PATH", "/") or "/").strip()
 SMTP_HOST = os.getenv("DEEPHPI_SMTP_HOST", "").strip()
 SMTP_PORT = int(os.getenv("DEEPHPI_SMTP_PORT", "587"))
 SMTP_USER = os.getenv("DEEPHPI_SMTP_USER", "").strip()
@@ -68,6 +69,26 @@ REQUIRED_MODEL_FILES = [
     "Best_AP.pth",
     "Fast_AP.pth",
 ]
+
+
+def normalize_base_path(value):
+    if not value or value == "/":
+        return ""
+    trimmed = value.rstrip("/")
+    return trimmed if trimmed.startswith("/") else f"/{trimmed}"
+
+
+BASE_PATH = normalize_base_path(RAW_BASE_PATH)
+
+
+def strip_base_path(path):
+    if not BASE_PATH:
+        return path
+    if path == BASE_PATH:
+        return "/"
+    if path.startswith(f"{BASE_PATH}/"):
+        return path[len(BASE_PATH) :] or "/"
+    return path
 
 
 def utc_now():
@@ -836,7 +857,7 @@ class DeepHPIHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):  # noqa: N802
         parsed = urlparse(self.path)
-        path = parsed.path
+        path = strip_base_path(parsed.path)
 
         if path.startswith("/api/jobs/"):
             parts = [part for part in path.split("/") if part]
@@ -887,7 +908,8 @@ class DeepHPIHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):  # noqa: N802
         parsed = urlparse(self.path)
-        if parsed.path != "/api/jobs":
+        path = strip_base_path(parsed.path)
+        if path != "/api/jobs":
             return self._send_error("Unsupported DeepHPI endpoint.", status=404)
 
         try:

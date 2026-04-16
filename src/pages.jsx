@@ -3,6 +3,7 @@ import { NetworkGraph } from "./components/NetworkGraph";
 import { ResultsTable } from "./components/ResultsTable";
 import { RouteLink } from "./components/AppShell";
 import { SubmissionWorkspace } from "./components/SubmissionWorkspace";
+import { assetPath, withBasePath } from "./lib/basePath";
 import {
   aboutParagraphs,
   covidProteins,
@@ -272,7 +273,7 @@ export function AboutPage() {
         <div className="paper-panel atlas-ring rounded-[1.25rem] p-5">
           <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-cobalt">Overview figure</p>
           <img
-            src="/assets/DeepHPI-GA.png"
+            src={assetPath("/assets/DeepHPI-GA.png")}
             alt="DeepHPI overview"
             className="mt-5 w-full rounded-[1rem] border border-ink/12 bg-white p-3"
           />
@@ -295,7 +296,7 @@ export function DatasetsPage() {
         <div className="paper-panel atlas-ring rounded-[1.25rem] p-5">
           <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-cobalt">Dataset map</p>
           <img
-            src="/assets/DeepHPI_Dataset.png"
+            src={assetPath("/assets/DeepHPI_Dataset.png")}
             alt="DeepHPI dataset overview"
             className="mt-5 w-full rounded-[1rem] border border-ink/12 bg-white p-3"
           />
@@ -408,7 +409,7 @@ export function CovidPage({ protein = null, navigate }) {
 
       try {
         if (viewingNetwork) {
-          const response = await fetch(`/covid/${selectedProtein}_ppi.json`);
+          const response = await fetch(withBasePath(`/covid/${selectedProtein}_ppi.json`));
           if (!response.ok) {
             throw new Error("Unable to load the selected SARS-CoV-2 interaction network.");
           }
@@ -420,7 +421,7 @@ export function CovidPage({ protein = null, navigate }) {
           return;
         }
 
-        const response = await fetch(`/covid/${selectedProtein}_ppi.txt`);
+        const response = await fetch(withBasePath(`/covid/${selectedProtein}_ppi.txt`));
         if (!response.ok) {
           throw new Error("Unable to load the selected SARS-CoV-2 interaction set.");
         }
