@@ -45,7 +45,7 @@ docker run --rm -p 3010:3010 deephpi:latest
 To serve DeepHPI from a subpath such as `/deepHPI/`, build and run with a matching base path:
 
 ```bash
-DEEPHPI_BASE_PATH=/deepHPI/ docker build -t deephpi:latest .
+docker build --build-arg DEEPHPI_BASE_PATH=/deepHPI/ -t deephpi:latest .
 docker run -d --restart unless-stopped --name deephpi \
   -p 3010:3010 \
   -e DEEPHPI_BASE_PATH=/deepHPI \

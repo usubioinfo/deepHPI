@@ -2,6 +2,9 @@ FROM node:20-bookworm-slim AS frontend-build
 
 WORKDIR /app
 
+ARG DEEPHPI_BASE_PATH=/
+ENV DEEPHPI_BASE_PATH=${DEEPHPI_BASE_PATH}
+
 COPY package.json package-lock.json ./
 RUN npm ci
 
